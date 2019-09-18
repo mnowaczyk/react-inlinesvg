@@ -193,7 +193,11 @@ export default class InlineSVG extends React.PureComponent<IProps, IState> {
 
     try {
       const svgText = this.processSVG();
-      const node = convert(svgText, { nodeOnly: true });
+      let options = { nodeOnly: true, type: 'text/html' };
+      if (window.navigator.userAgent.match(/Tizen 2.4.0/)) {
+        options = { nodeOnly: true, type: 'text/xml' }
+      }
+      const node = convert(svgText, options);
 
       if (!node || !(node instanceof SVGSVGElement)) {
         throw new InlineSVGError('Could not convert the src to a DOM Node');
